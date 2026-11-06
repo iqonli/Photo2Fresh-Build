@@ -1,4 +1,4 @@
-name: Photo2Fresh Android 1.2.1 Debug
+name: Photo2Fresh 1.2.1 Signed ARM64 and x86_64
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - name: Check out source and Git LFS models
@@ -27,7 +27,7 @@ jobs:
           elif [[ -f Photo2Fresh/settings.gradle.kts || -f Photo2Fresh/settings.gradle ]]; then
             dir="Photo2Fresh"
           else
-            echo "No Gradle settings file found at repository root or Photo2Fresh/." >&2
+            echo 'No settings.gradle(.kts) found in repository root or Photo2Fresh/.' >&2
             exit 1
           fi
           echo "dir=$dir" >> "$GITHUB_OUTPUT"
@@ -44,14 +44,13 @@ jobs:
         with:
           gradle-version: '8.13'
 
-      - name: Ensure Android SDK 36 is available
+      - name: Install Android SDK 36
         shell: bash
         run: |
           set -euo pipefail
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0'
+          sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
 
-      - name: Validate all nine deployment models
+      - name: Validate model assets
         shell: bash
         env:
           PROJECT_DIR: ${{ steps.project.outputs.dir }}
@@ -63,7 +62,7 @@ jobs:
 
           root = Path(os.environ['PROJECT_DIR'])
           base = root / 'app/src/main/assets'
-          names = [
+          expected = [
               'models/indian_flying_pancake_1280.onnx',
               'models/hydralisk_seg_1024_final.onnx',
               '肉类新鲜度/公共图像特征.onnx',
@@ -73,25 +72,22 @@ jobs:
               '肉类新鲜度/牛肉_4摄氏度_双目标.onnx',
               '肉类新鲜度/鸡肉_25摄氏度_双目标.onnx',
               '肉类新鲜度/鸡肉_4摄氏度_双目标.onnx',
+              '肉类新鲜度/模型配置.json',
+              '肉类新鲜度/预处理自检.json',
           ]
-          extra = ['肉类新鲜度/模型配置.json', '肉类新鲜度/预处理自检.json']
-          for relative in names + extra:
+          for relative in expected:
               path = base / relative
-              if not path.is_file():
-                  raise SystemExit(f'Missing required file: {path}')
-              if path.stat().st_size == 0:
-                  raise SystemExit(f'Empty required file: {path}')
-              with path.open('rb') as handle:
-                  header = handle.read(80)
-              if header.startswith(b'version https://git-lfs.github.com/spec/v1'):
-                  raise SystemExit(f'Git LFS pointer instead of real content: {path}')
-              print(f'OK: {relative} ({path.stat().st_size:,} bytes)')
+              if not path.is_file() or path.stat().st_size == 0:
+                  raise SystemExit(f'Missing or empty model asset: {path}')
+              if path.open('rb').read(80).startswith(b'version https://git-lfs.github.com/spec/v1'):
+                  raise SystemExit(f'Git LFS pointer was not downloaded: {path}')
+              print(f'OK {relative}: {path.stat().st_size:,} bytes')
           PY
           if [[ -f "$PROJECT_DIR/tools/check_model_assets.py" ]]; then
             (cd "$PROJECT_DIR" && python3 tools/check_model_assets.py)
           fi
 
-      - name: Build Debug APK
+      - name: Build both ABI Debug APKs
         shell: bash
         env:
           PROJECT_DIR: ${{ steps.project.outputs.dir }}
@@ -103,7 +99,7 @@ jobs:
             -Dorg.gradle.jvmargs='-Xmx3g -XX:MaxMetaspaceSize=768m -Dfile.encoding=UTF-8' \
             2>&1 | tee "$RUNNER_TEMP/photo2fresh-build.log"
 
-      - name: Select ARM64-compatible APK and verify packaged ONNX assets
+      - name: Select independent ABI APKs and verify nine ONNX files
         shell: bash
         env:
           PROJECT_DIR: ${{ steps.project.outputs.dir }}
@@ -118,20 +114,11 @@ jobs:
 
           root = Path(os.environ['PROJECT_DIR'])
           output = root / 'app/build/outputs/apk/debug'
-          apks = sorted(output.rglob('*.apk')) if output.is_dir() else []
+          apks = sorted(output.rglob('*.apk')) if output.exists() else []
           if not apks:
-              raise SystemExit(f'No Debug APK found in {output}')
+              raise SystemExit(f'No APK found in {output}')
 
-          compatible = []
-          for apk in apks:
-              with ZipFile(apk) as archive:
-                  if any(name.startswith('lib/arm64-v8a/') for name in archive.namelist()):
-                      compatible.append(apk)
-          if not compatible:
-              raise SystemExit('No APK contains arm64-v8a native libraries; inspect ABI splits.')
-
-          apk = sorted(compatible, key=lambda p: (0 if 'arm64' in p.name.lower() else 1, p.stat().st_size))[0]
-          names = [
+          models = [
               'models/indian_flying_pancake_1280.onnx',
               'models/hydralisk_seg_1024_final.onnx',
               '肉类新鲜度/公共图像特征.onnx',
@@ -142,44 +129,137 @@ jobs:
               '肉类新鲜度/鸡肉_25摄氏度_双目标.onnx',
               '肉类新鲜度/鸡肉_4摄氏度_双目标.onnx',
           ]
-          with ZipFile(apk) as archive:
-              for relative in names:
-                  src = root / 'app/src/main/assets' / relative
-                  entry = f'assets/{relative}'
-                  if entry not in archive.namelist():
-                      raise SystemExit(f'ONNX missing from APK: {entry}')
-                  def stream_sha256(stream):
-                      digest = hashlib.sha256()
-                      while True:
-                          block = stream.read(1024 * 1024)
-                          if not block:
-                              break
-                          digest.update(block)
-                      return digest.digest()
-                  with src.open('rb') as source, archive.open(entry) as packaged:
-                      source_hash = stream_sha256(source)
-                      packaged_hash = stream_sha256(packaged)
-                  if source_hash != packaged_hash:
-                      raise SystemExit(f'ONNX content changed in APK: {entry}')
-                  print(f'APK verified: {entry}')
 
-          staging = Path(os.environ['RUNNER_TEMP']) / 'photo2fresh-apk'
-          staging.mkdir(exist_ok=True)
-          dest = staging / 'Photo2Fresh-v1.2.1-code13-ARM64-debug.apk'
-          shutil.copy2(apk, dest)
-          print(f'Staged {dest} ({dest.stat().st_size:,} bytes)')
+          def sha256_of(stream):
+              digest = hashlib.sha256()
+              while True:
+                  data = stream.read(1024 * 1024)
+                  if not data:
+                      return digest.digest()
+                  digest.update(data)
+
+          matches = {'arm64-v8a': [], 'x86_64': []}
+          for apk in apks:
+              with ZipFile(apk) as z:
+                  abis = {
+                      p.split('/')[1]
+                      for p in z.namelist()
+                      if p.startswith('lib/') and p.endswith('.so')
+                      and len(p.split('/')) >= 3
+                  }
+                  print(f'{apk}: native ABIs = {sorted(abis)}')
+                  if len(abis) == 1:
+                      abi = next(iter(abis))
+                      if abi in matches:
+                          matches[abi].append(apk)
+
+          for abi in matches:
+              candidates = matches[abi]
+              if len(candidates) != 1:
+                  raise SystemExit(
+                      f'Expected exactly one independent {abi} APK, found {len(candidates)}. '
+                      'Check app/build.gradle(.kts) ABI splits and build outputs. '
+                      'A universal APK must not be mislabelled as an ABI-only APK.'
+                  )
+
+          staging = Path(os.environ['RUNNER_TEMP']) / 'p2f-unsigned'
+          staging.mkdir(parents=True, exist_ok=True)
+          names = {
+              'arm64-v8a': 'Photo2Fresh-v1.2.1-code13-ARM64-unsigned.apk',
+              'x86_64': 'Photo2Fresh-v1.2.1-code13-x86_64-unsigned.apk',
+          }
+          for abi, candidates in matches.items():
+              apk = candidates[0]
+              with ZipFile(apk) as z:
+                  archived = set(z.namelist())
+                  for relative in models:
+                      entry = f'assets/{relative}'
+                      if entry not in archived:
+                          raise SystemExit(f'{abi}: missing {entry}')
+                      with (root / 'app/src/main/assets' / relative).open('rb') as src, z.open(entry) as dst:
+                          if sha256_of(src) != sha256_of(dst):
+                              raise SystemExit(f'{abi}: SHA256 mismatch for {entry}')
+                  for extra in ('肉类新鲜度/模型配置.json', '肉类新鲜度/预处理自检.json'):
+                      if f'assets/{extra}' not in archived:
+                          raise SystemExit(f'{abi}: missing assets/{extra}')
+              destination = staging / names[abi]
+              shutil.copy2(apk, destination)
+              print(f'Checked {abi}: 9 ONNX hashes OK; staged {destination.name}')
           PY
 
-      - name: Upload verified APK
+      - name: Sign both APKs with original JKS and check signature
+        shell: bash
+        env:
+          P2F_KEYSTORE_B64: ${{ secrets.P2F_KEYSTORE_B64 }}
+          P2F_STORE_PASSWORD: ${{ secrets.P2F_STORE_PASSWORD }}
+          P2F_KEY_ALIAS: ${{ secrets.P2F_KEY_ALIAS }}
+          P2F_KEY_PASSWORD: ${{ secrets.P2F_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${P2F_KEYSTORE_B64:?Missing P2F_KEYSTORE_B64 secret}"
+          : "${P2F_STORE_PASSWORD:?Missing P2F_STORE_PASSWORD secret}"
+          : "${P2F_KEY_ALIAS:?Missing P2F_KEY_ALIAS secret}"
+          : "${P2F_KEY_PASSWORD:?Missing P2F_KEY_PASSWORD secret}"
+          umask 077
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:?Android SDK unavailable}}"
+          apksigner="$sdk_root/build-tools/36.0.0/apksigner"
+          zipalign="$sdk_root/build-tools/36.0.0/zipalign"
+          aapt="$sdk_root/build-tools/36.0.0/aapt"
+          keyfile="$RUNNER_TEMP/p2f-signing.jks"
+          trap 'rm -f "$keyfile"' EXIT
+          printf '%s' "$P2F_KEYSTORE_B64" | base64 --decode > "$keyfile"
+          test -s "$keyfile"
+
+          mkdir -p "$RUNNER_TEMP/p2f-signed"
+          for entry in 'arm64-v8a:ARM64' 'x86_64:x86_64'; do
+            abi="${entry%%:*}"
+            label="${entry##*:}"
+            src="$RUNNER_TEMP/p2f-unsigned/Photo2Fresh-v1.2.1-code13-${label}-unsigned.apk"
+            dest="$RUNNER_TEMP/p2f-signed/Photo2Fresh-v1.2.1-code13-${label}-signed.apk"
+            echo "Signing $abi"
+            "$zipalign" -c -P 16 4 "$src"
+            "$apksigner" sign \
+              --ks "$keyfile" \
+              --ks-key-alias "$P2F_KEY_ALIAS" \
+              --ks-pass env:P2F_STORE_PASSWORD \
+              --key-pass env:P2F_KEY_PASSWORD \
+              --v4-signing-enabled false \
+              --out "$dest" "$src"
+            "$apksigner" verify --verbose --print-certs "$dest" \
+              > "$RUNNER_TEMP/p2f-signature-$label.txt"
+            "$zipalign" -c -P 16 4 "$dest"
+            cert="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$RUNNER_TEMP/p2f-signature-$label.txt" | head -n 1 | tr -d ':' | tr '[:upper:]' '[:lower:]')"
+            expected='e4ab0b5972159d47189e4bcd1b7d06ef052b176715d2fcc4185651a4f30c7fa4'
+            if [[ "$cert" != "$expected" ]]; then
+              echo "Incorrect release certificate for $abi (actual $cert, expected $expected)" >&2
+              exit 1
+            fi
+            badging="$($aapt dump badging "$dest" | head -n 1)"
+            echo "$badging"
+            [[ "$badging" == *"versionCode='13'"* ]] || { echo 'versionCode is not 13' >&2; exit 1; }
+            [[ "$badging" == *"versionName='1.2.1'"* ]] || { echo 'versionName is not 1.2.1' >&2; exit 1; }
+            echo "Signed and verified: $(basename "$dest")"
+          done
+
+      - name: Upload signed ARM64 APK
         uses: actions/upload-artifact@v4
         with:
-          name: Photo2Fresh-1.2.1-13-ARM64-debug
-          path: ${{ runner.temp }}/photo2fresh-apk/*.apk
+          name: Photo2Fresh-1.2.1-13-ARM64-signed
+          path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.1-code13-ARM64-signed.apk
           if-no-files-found: error
           retention-days: 3
           compression-level: 0
 
-      - name: Upload build diagnostics on failure
+      - name: Upload signed x86_64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Photo2Fresh-1.2.1-13-x86_64-signed
+          path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.1-code13-x86_64-signed.apk
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
+
+      - name: Upload diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
