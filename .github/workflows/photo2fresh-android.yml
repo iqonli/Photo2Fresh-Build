@@ -198,7 +198,6 @@ jobs:
           set -euo pipefail
           : "${P2F_KEYSTORE_B64:?Missing P2F_KEYSTORE_B64 secret}"
           : "${P2F_STORE_PASSWORD:?Missing P2F_STORE_PASSWORD secret}"
-          : "${P2F_KEY_ALIAS:?Missing P2F_KEY_ALIAS secret}"
           : "${P2F_KEY_PASSWORD:?Missing P2F_KEY_PASSWORD secret}"
           umask 077
           sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:?Android SDK unavailable}}"
@@ -220,7 +219,6 @@ jobs:
             "$zipalign" -c -P 16 4 "$src"
             "$apksigner" sign \
               --ks "$keyfile" \
-              --ks-key-alias "$P2F_KEY_ALIAS" \
               --ks-pass env:P2F_STORE_PASSWORD \
               --key-pass env:P2F_KEY_PASSWORD \
               --v4-signing-enabled false \
