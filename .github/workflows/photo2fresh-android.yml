@@ -140,7 +140,7 @@ jobs:
 
           matches = {'arm64-v8a': [], 'x86_64': []}
           for apk in apks:
-              with ZipFile(apk) as z:
+              with ZipFile(apk, metadata_encoding='utf-8') as z:
                   abis = {
                       p.split('/')[1]
                       for p in z.namelist()
@@ -170,7 +170,7 @@ jobs:
           }
           for abi, candidates in matches.items():
               apk = candidates[0]
-              with ZipFile(apk) as z:
+              with ZipFile(apk, metadata_encoding='utf-8') as z:
                   archived = set(z.namelist())
                   for relative in models:
                       entry = f'assets/{relative}'
