@@ -1,4 +1,4 @@
-name: Photo2Fresh 1.2.1 Signed ARM64 and x86_64
+name: Photo2Fresh 1.2.1 Signed ARM64
 
 on:
   workflow_dispatch:
@@ -87,7 +87,7 @@ jobs:
             (cd "$PROJECT_DIR" && python3 tools/check_model_assets.py)
           fi
 
-      - name: Build both ABI Debug APKs
+      - name: Build ARM64 Debug APK
         shell: bash
         env:
           PROJECT_DIR: ${{ steps.project.outputs.dir }}
@@ -99,7 +99,7 @@ jobs:
             -Dorg.gradle.jvmargs='-Xmx3g -XX:MaxMetaspaceSize=768m -Dfile.encoding=UTF-8' \
             2>&1 | tee "$RUNNER_TEMP/photo2fresh-build.log"
 
-      - name: Select independent ABI APKs and verify nine ONNX files
+      - name: Select ARM64 APK and verify nine ONNX files
         shell: bash
         env:
           PROJECT_DIR: ${{ steps.project.outputs.dir }}
@@ -138,7 +138,7 @@ jobs:
                       return digest.digest()
                   digest.update(data)
 
-          matches = {'arm64-v8a': [], 'x86_64': []}
+          matches = {'arm64-v8a': []}
           for apk in apks:
               with ZipFile(apk, metadata_encoding='utf-8') as z:
                   abis = {
@@ -166,7 +166,6 @@ jobs:
           staging.mkdir(parents=True, exist_ok=True)
           names = {
               'arm64-v8a': 'Photo2Fresh-v1.2.1-code13-ARM64-unsigned.apk',
-              'x86_64': 'Photo2Fresh-v1.2.1-code13-x86_64-unsigned.apk',
           }
           for abi, candidates in matches.items():
               apk = candidates[0]
@@ -187,7 +186,7 @@ jobs:
               print(f'Checked {abi}: 9 ONNX hashes OK; staged {destination.name}')
           PY
 
-      - name: Sign both APKs with original JKS and check signature
+      - name: Sign ARM64 APK and check signature
         shell: bash
         env:
           P2F_KEYSTORE_B64: ${{ secrets.P2F_KEYSTORE_B64 }}
@@ -210,7 +209,7 @@ jobs:
           test -s "$keyfile"
 
           mkdir -p "$RUNNER_TEMP/p2f-signed"
-          for entry in 'arm64-v8a:ARM64' 'x86_64:x86_64'; do
+          for entry in 'arm64-v8a:ARM64'; do
             abi="${entry%%:*}"
             label="${entry##*:}"
             src="$RUNNER_TEMP/p2f-unsigned/Photo2Fresh-v1.2.1-code13-${label}-unsigned.apk"
@@ -244,15 +243,6 @@ jobs:
         with:
           name: Photo2Fresh-1.2.1-13-ARM64-signed
           path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.1-code13-ARM64-signed.apk
-          if-no-files-found: error
-          retention-days: 3
-          compression-level: 0
-
-      - name: Upload signed x86_64 APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Photo2Fresh-1.2.1-13-x86_64-signed
-          path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.1-code13-x86_64-signed.apk
           if-no-files-found: error
           retention-days: 3
           compression-level: 0
