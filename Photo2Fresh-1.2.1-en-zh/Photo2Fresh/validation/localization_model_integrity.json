@@ -1,0 +1,18 @@
+{
+  "model_count": 9,
+  "model_sha256": {
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/models/hydralisk_seg_1024_final.onnx": "5aeec6b1787fd26dbe148178922a000330a5532ce820d561c72eaddc7d2cc74d",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/models/indian_flying_pancake_1280.onnx": "c6d1ab8fd458279e0b0fc97b6c21e4d2f7408bedf3d981c3c46e728e7c5f2ec4",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/公共图像特征.onnx": "652bc95430b1f386efdca8d9b0ab872a5d1da76ca4d3e95bb4c0db9291795f72",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/牛肉_25摄氏度_双目标.onnx": "f5c150ce8c412eed7173f841b7fd4bbfb143fac33d6c58cedb6ca6c61aec008f",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/牛肉_4摄氏度_双目标.onnx": "a6b5267a9a5891fe7c59606a015782daf02f7407e7ecb096a97c9e8eb485b900",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/猪肉_25摄氏度_双目标.onnx": "b6e10949c3acdba300234ff244f25a6012a432966b3b14b20bca74e2cb2ca1df",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/猪肉_4摄氏度_双目标.onnx": "6e6bb3255797568ffc2448ca6bfcc1f1eae474768b676508da26c63ce0c55e68",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/鸡肉_25摄氏度_双目标.onnx": "96a19ee98700adb37cae85e1340c1e7b9cf61a6892e236046671c6628b5006b8",
+    "Photo2Fresh-1.2.1-full/Photo2Fresh/app/src/main/assets/肉类新鲜度/鸡肉_4摄氏度_双目标.onnx": "ad70e376e15a45668a2f8d88ec7b4f747477740dc659183bcc425eb0705ff7d0"
+  },
+  "inference_and_routing_unchanged": true,
+  "version_name": "1.2.1",
+  "version_code": 13,
+  "apk_requested_or_generated": false
+}

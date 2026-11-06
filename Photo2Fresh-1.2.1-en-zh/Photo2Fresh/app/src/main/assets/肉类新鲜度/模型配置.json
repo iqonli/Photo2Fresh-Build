@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "created": "2026-10-26",
+  "frontend": {
+    "file": "公共图像特征.onnx",
+    "sha256": "652bc95430b1f386efdca8d9b0ab872a5d1da76ca4d3e95bb4c0db9291795f72",
+    "bytes": 19136421,
+    "input_name": "images",
+    "output_name": "features",
+    "input_shape": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "output_shape": [
+      1,
+      512,
+      7,
+      7
+    ],
+    "opset": 17,
+    "operators": [
+      "Add",
+      "Concat",
+      "Constant",
+      "Conv",
+      "Div",
+      "Gather",
+      "MatMul",
+      "Mul",
+      "Reshape",
+      "Shape",
+      "Sigmoid",
+      "Slice",
+      "Softmax",
+      "Split",
+      "Transpose"
+    ],
+    "external_data": false
+  },
+  "routes": [
+    {
+      "file": "猪肉_25摄氏度_双目标.onnx",
+      "sha256": "b6e10949c3acdba300234ff244f25a6012a432966b3b14b20bca74e2cb2ca1df",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "pork_25c",
+      "meat": "猪肉",
+      "temperature_c": 25,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\猪肉_YOLO26s_双温度固定300轮训练曲线_20261021\\300轮模型与评估\\猪肉25摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "2847b05516474a02e0b3a494ec4c5d54a7e653612c7cf5395ca29ebe6b953bef"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\猪肉_非负时间回归_双温度300轮_20261022\\模型与记录\\猪肉25摄氏度_非负时间_300轮模型.pt",
+          "sha256": "a75a62051286e0cb066e0a85947f22144f98d1f104311fbb01de77f57ae4c3a7"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        48
+      ],
+      "epochs": 300
+    },
+    {
+      "file": "猪肉_4摄氏度_双目标.onnx",
+      "sha256": "6e6bb3255797568ffc2448ca6bfcc1f1eae474768b676508da26c63ce0c55e68",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "pork_4c",
+      "meat": "猪肉",
+      "temperature_c": 4,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\猪肉_YOLO26s_双温度固定300轮训练曲线_20261021\\300轮模型与评估\\猪肉4摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "a02c64e1a7e885f9c58ac54206748b4f2d9e8bf86d14344cbfcdcb823bfeee78"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\猪肉_非负时间回归_双温度300轮_20261022\\模型与记录\\猪肉4摄氏度_非负时间_300轮模型.pt",
+          "sha256": "314da12cc6207c417c466ac6fd008e65c1f0f3fdcbe0d1c8b7ef266fcde126ff"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        216
+      ],
+      "epochs": 300
+    },
+    {
+      "file": "牛肉_25摄氏度_双目标.onnx",
+      "sha256": "f5c150ce8c412eed7173f841b7fd4bbfb143fac33d6c58cedb6ca6c61aec008f",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "beef_25c",
+      "meat": "牛肉",
+      "temperature_c": 25,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\牛肉_YOLO26s_单温度与混合300轮_20261023\\05_模型与训练记录\\牛肉_25摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "22a5df8c4d2fb8641b2c7445fffc0f54298e325d84b1a171b1f250d07e7d211b"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\牛肉_YOLO26s_单温度与混合300轮_20261023\\05_模型与训练记录\\牛肉_25摄氏度_储存时间_300轮模型.pt",
+          "sha256": "40231199e922616bd2221da30155eae7c1e2be9a2452da4126d448dd8967344c"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        48
+      ],
+      "epochs": 300
+    },
+    {
+      "file": "牛肉_4摄氏度_双目标.onnx",
+      "sha256": "a6b5267a9a5891fe7c59606a015782daf02f7407e7ecb096a97c9e8eb485b900",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "beef_4c",
+      "meat": "牛肉",
+      "temperature_c": 4,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\牛肉_YOLO26s_单温度与混合300轮_20261023\\05_模型与训练记录\\牛肉_4摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "054409be2e49d0d44399c97b75ed0e381ea269f69e0ca96ad859a92485de9a60"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\牛肉_YOLO26s_单温度与混合300轮_20261023\\05_模型与训练记录\\牛肉_4摄氏度_储存时间_300轮模型.pt",
+          "sha256": "21f4276c8dc80a2f3149cbd5e5472b40f6cec2c8368700e8b2f90903ed91cc6d"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        192
+      ],
+      "epochs": 300
+    },
+    {
+      "file": "鸡肉_25摄氏度_双目标.onnx",
+      "sha256": "96a19ee98700adb37cae85e1340c1e7b9cf61a6892e236046671c6628b5006b8",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "chicken_25c",
+      "meat": "鸡肉",
+      "temperature_c": 25,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\鸡肉_YOLO26s_固定随机300轮_单温度与混合_20261021\\05_模型与训练记录\\鸡肉_25摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "53ed41a87b124ed0afad2694a5d789811cf59aa595ae0855bb679857097997ff"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\鸡肉_非负时间回归_双温度300轮_20261023\\模型与记录\\鸡肉25摄氏度_非负时间_300轮模型.pt",
+          "sha256": "2879be8aa41bc12040e557b71f56790aa8650d01e7324b6b2ed2db7bc382ea1a"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        48
+      ],
+      "epochs": 300
+    },
+    {
+      "file": "鸡肉_4摄氏度_双目标.onnx",
+      "sha256": "ad70e376e15a45668a2f8d88ec7b4f747477740dc659183bcc425eb0705ff7d0",
+      "bytes": 5923318,
+      "input_name": "features",
+      "output_name": "prediction",
+      "input_shape": [
+        1,
+        512,
+        7,
+        7
+      ],
+      "output_shape": [
+        1,
+        2
+      ],
+      "opset": 17,
+      "operators": [
+        "Add",
+        "Concat",
+        "Conv",
+        "Div",
+        "Flatten",
+        "Gemm",
+        "GlobalAveragePool",
+        "Identity",
+        "Mul",
+        "Relu",
+        "Sigmoid",
+        "Softplus",
+        "Sub"
+      ],
+      "external_data": false,
+      "route_id": "chicken_4c",
+      "meat": "鸡肉",
+      "temperature_c": 4,
+      "output_columns": [
+        "tvbn_mg_per_100g",
+        "storage_time_h"
+      ],
+      "source_weights": [
+        {
+          "task": "TVB-N",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\鸡肉_YOLO26s_固定随机300轮_单温度与混合_20261021\\05_模型与训练记录\\鸡肉_4摄氏度_TVB-N_300轮模型.pt",
+          "sha256": "32907d730269251c91f76cbd9c70f83524ef9e9245fe5c4230cc98179a85b9c7"
+        },
+        {
+          "task": "时间",
+          "original_path": "C:\\Users\\pan\\Documents\\Codex\\2026-09-15\\4-mlp-25-4-tvb-n\\outputs\\鸡肉_非负时间回归_双温度300轮_20261023\\模型与记录\\鸡肉4摄氏度_非负时间_300轮模型.pt",
+          "sha256": "a4cf1f3c2afcdd62754b12a865696be9c919734ffcba0aeab45dba14dc1c3da7"
+        }
+      ],
+      "training_time_range_h": [
+        0,
+        192
+      ],
+      "epochs": 300
+    }
+  ],
+  "input": {
+    "rgb_order": "RGB",
+    "shape": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "dtype": "float32",
+    "range": [
+      0,
+      1
+    ],
+    "imagenet_normalization": false,
+    "preprocessing_inside_onnx": false
+  },
+  "features": {
+    "shape": [
+      1,
+      512,
+      7,
+      7
+    ],
+    "dtype": "float32"
+  },
+  "prediction": {
+    "shape": [
+      1,
+      2
+    ],
+    "columns": [
+      "tvbn_mg_per_100g",
+      "storage_time_h"
+    ],
+    "physical_unit_transform_inside_onnx": true
+  },
+  "freshness": {
+    "Fresh": "TVB-N < 15",
+    "LessFresh": "15 <= TVB-N <= 20",
+    "Spoiled": "TVB-N > 20"
+  },
+  "time_transform": "time_scale_h * Softplus(raw); no mean addition, clipping or abs",
+  "precision": "FP32",
+  "external_weights_required": false,
+  "architecture": "One shared frozen frontend plus six independently trained dual-target modules",
+  "source_pretrained_sha256": "816790029d5df3fef358f03c8144b96339d8824ee25577aeda8be0963e5c5f09"
+}

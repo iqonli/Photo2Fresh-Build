@@ -1,0 +1,41 @@
+{
+  "format": "Photo2Fresh YOLO export manifest",
+  "posePredictParameters": {
+    "imgsz": 1280,
+    "conf": 0.25
+  },
+  "segPredictParameters": {
+    "imgsz": 1024,
+    "candidateConf": 0.001,
+    "iou": 0.7,
+    "maxDet": 100
+  },
+  "models": [
+    {
+      "source": "T:\\yolosticker\\indian_flying_pancake_1280.pt",
+      "task": "pose",
+      "imgsz": 1280,
+      "onnx": "T:\\photo2fresh\\app\\src\\main\\assets\\models\\indian_flying_pancake_1280.onnx",
+      "bytes": 40238644,
+      "sha256": "c6d1ab8fd458279e0b0fc97b6c21e4d2f7408bedf3d981c3c46e728e7c5f2ec4",
+      "dynamic": false,
+      "batch": 1,
+      "nmsEmbedded": false,
+      "precision": "fp32",
+      "opset": 17
+    },
+    {
+      "source": "T:\\yolosticker\\Hydralisk_release_20260721\\models\\hydralisk_seg_1024_final.pt",
+      "task": "segment",
+      "imgsz": 1024,
+      "onnx": "T:\\photo2fresh\\app\\src\\main\\assets\\models\\hydralisk_seg_1024_final.onnx",
+      "bytes": 42068458,
+      "sha256": "5aeec6b1787fd26dbe148178922a000330a5532ce820d561c72eaddc7d2cc74d",
+      "dynamic": false,
+      "batch": 1,
+      "nmsEmbedded": false,
+      "precision": "fp32",
+      "opset": 17
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "tests": 12,
+  "failures": 0,
+  "errors": 0,
+  "suites": [
+    {
+      "name": "com.iqonli.photo2fresh.ExampleUnitTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-06T02:13:40.209Z",
+      "hostname": "743dc2399f21",
+      "time": "0.011"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.i18n.ApprovedStaticTranslationsTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-06T02:13:40.236Z",
+      "hostname": "743dc2399f21",
+      "time": "0.542"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.i18n.DisplayTextCatalogTest",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-06T02:13:40.785Z",
+      "hostname": "743dc2399f21",
+      "time": "0.066"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.regression.DeploymentPixelTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-06T02:13:40.854Z",
+      "hostname": "743dc2399f21",
+      "time": "0.227"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.regression.RegressionPreprocessingTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-06T02:13:41.084Z",
+      "hostname": "743dc2399f21",
+      "time": "0.02"
+    }
+  ],
+  "static_translation_assertions": 234,
+  "android_instrumentation_executed": false,
+  "apk_generated": false
+}

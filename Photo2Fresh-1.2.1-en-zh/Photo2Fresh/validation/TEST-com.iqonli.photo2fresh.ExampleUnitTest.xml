@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iqonli.photo2fresh.ExampleUnitTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-06T02:13:40.209Z" hostname="743dc2399f21" time="0.011">
+  <properties/>
+  <testcase name="addition_isCorrect" classname="com.iqonli.photo2fresh.ExampleUnitTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

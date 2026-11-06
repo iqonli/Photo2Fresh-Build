@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: C=CN, ST=CN, L=CN, O=IQ Online Studio, OU=photo2fresh, CN=PerryDing
+Signer #1 certificate SHA-256 digest: e4ab0b5972159d47189e4bcd1b7d06ef052b176715d2fcc4185651a4f30c7fa4
+Signer #1 certificate SHA-1 digest: ae2fd408f08eb61752de5182217cfefd18bb0827
+Signer #1 certificate MD5 digest: 3cfc45d98093545f769790acea5cef1e
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 570aeedc16174ec28a0a453081bde4cc3cf194e6018b1a7b7f14329f49613d65
+Signer #1 public key SHA-1 digest: 9d170480955e4188dc034d493871f6231ed3e8be
+Signer #1 public key MD5 digest: 061e905e25e8f6c233e9a0794c4464b1

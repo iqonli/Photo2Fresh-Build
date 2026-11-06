@@ -1,0 +1,20 @@
+{
+  "Photo2Fresh-1.2.0-x86_64-debug.apk": {
+    "bytes": 221967186,
+    "sha256": "a19d589f0a9ab9d528b4e8c674cd1f9b4a156dd3217ae30358c2f9acd17d5cd2",
+    "abis": [
+      "x86_64"
+    ],
+    "onnx_count": 9,
+    "model_hashes_match": true
+  },
+  "Photo2Fresh-1.2.0-arm64-v8a-debug.apk": {
+    "bytes": 184120151,
+    "sha256": "5683c0e2bc8cd00b83694d83ca6efac7f78eaa4b6c106023f262865fe49e7efd",
+    "abis": [
+      "arm64-v8a"
+    ],
+    "onnx_count": 9,
+    "model_hashes_match": true
+  }
+}

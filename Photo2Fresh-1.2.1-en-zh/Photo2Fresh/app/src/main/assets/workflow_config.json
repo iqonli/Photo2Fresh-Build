@@ -1,0 +1,63 @@
+{
+  "configVersion": 3,
+  "developmentMode": true,
+  "pose": {
+    "displayName": "检测卡定位模型",
+    "assetPath": "models/indian_flying_pancake_1280.onnx",
+    "inputSize": 1280,
+    "confidence": 0.25,
+    "keypointCount": 5,
+    "letterboxValue": 114
+  },
+  "rectification": {
+    "canvasSize": 1000,
+    "squareSize": 800,
+    "outputCodec": "jpeg95",
+    "jpegQuality": 95,
+    "interpolation": "cubic"
+  },
+  "segmentation": {
+    "displayName": "传感区域分割模型",
+    "assetPath": "models/hydralisk_seg_1024_final.onnx",
+    "inputSize": 1024,
+    "candidateConfidence": 0.001,
+    "iouThreshold": 0.7,
+    "maxDetections": 100,
+    "maskThreshold": 0.5,
+    "letterboxValue": 114,
+    "parameterNote": "0.001 是当前正常候选工作点，不得因数值低而擅自提高",
+    "classNames": [
+      "W0",
+      "Gx",
+      "Gy",
+      "C11",
+      "C12",
+      "C13",
+      "C21",
+      "C22",
+      "C23",
+      "C31",
+      "C32",
+      "C33"
+    ]
+  },
+  "rainbow": {
+    "roiScale": 0.3333333333333333,
+    "ransacIterations": 2500,
+    "residualStepRatio": 0.3,
+    "minInliers": 3,
+    "maxRecover": 6,
+    "calibrationStrength": 1.0,
+    "gainMin": 0.25,
+    "gainMax": 4.0,
+    "standardGrayRgb": [
+      180,
+      180,
+      180
+    ],
+    "parameterNote": "minInliers=3 与 maxRecover=6 为本次明确指定的 Android 实验参数"
+  },
+  "regression": {
+    "manifestAssetPath": "肉类新鲜度/模型配置.json"
+  }
+}

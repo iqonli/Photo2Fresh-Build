@@ -1,0 +1,191 @@
+name: Photo2Fresh Android 1.2.1 Debug
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source and Git LFS models
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Locate Android project
+        id: project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f settings.gradle.kts || -f settings.gradle ]]; then
+            dir="."
+          elif [[ -f Photo2Fresh/settings.gradle.kts || -f Photo2Fresh/settings.gradle ]]; then
+            dir="Photo2Fresh"
+          else
+            echo "No Gradle settings file found at repository root or Photo2Fresh/." >&2
+            exit 1
+          fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "Project directory: $dir"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Ensure Android SDK 36 is available
+        shell: bash
+        run: |
+          set -euo pipefail
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0'
+
+      - name: Validate all nine deployment models
+        shell: bash
+        env:
+          PROJECT_DIR: ${{ steps.project.outputs.dir }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ['PROJECT_DIR'])
+          base = root / 'app/src/main/assets'
+          names = [
+              'models/indian_flying_pancake_1280.onnx',
+              'models/hydralisk_seg_1024_final.onnx',
+              '肉类新鲜度/公共图像特征.onnx',
+              '肉类新鲜度/猪肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/猪肉_4摄氏度_双目标.onnx',
+              '肉类新鲜度/牛肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/牛肉_4摄氏度_双目标.onnx',
+              '肉类新鲜度/鸡肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/鸡肉_4摄氏度_双目标.onnx',
+          ]
+          extra = ['肉类新鲜度/模型配置.json', '肉类新鲜度/预处理自检.json']
+          for relative in names + extra:
+              path = base / relative
+              if not path.is_file():
+                  raise SystemExit(f'Missing required file: {path}')
+              if path.stat().st_size == 0:
+                  raise SystemExit(f'Empty required file: {path}')
+              with path.open('rb') as handle:
+                  header = handle.read(80)
+              if header.startswith(b'version https://git-lfs.github.com/spec/v1'):
+                  raise SystemExit(f'Git LFS pointer instead of real content: {path}')
+              print(f'OK: {relative} ({path.stat().st_size:,} bytes)')
+          PY
+          if [[ -f "$PROJECT_DIR/tools/check_model_assets.py" ]]; then
+            (cd "$PROJECT_DIR" && python3 tools/check_model_assets.py)
+          fi
+
+      - name: Build Debug APK
+        shell: bash
+        env:
+          PROJECT_DIR: ${{ steps.project.outputs.dir }}
+        run: |
+          set -euo pipefail
+          gradle -p "$PROJECT_DIR" :app:assembleDebug \
+            --no-daemon --max-workers=2 --stacktrace \
+            -Pkotlin.incremental=false \
+            -Dorg.gradle.jvmargs='-Xmx3g -XX:MaxMetaspaceSize=768m -Dfile.encoding=UTF-8' \
+            2>&1 | tee "$RUNNER_TEMP/photo2fresh-build.log"
+
+      - name: Select ARM64-compatible APK and verify packaged ONNX assets
+        shell: bash
+        env:
+          PROJECT_DIR: ${{ steps.project.outputs.dir }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import os
+          import shutil
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          root = Path(os.environ['PROJECT_DIR'])
+          output = root / 'app/build/outputs/apk/debug'
+          apks = sorted(output.rglob('*.apk')) if output.is_dir() else []
+          if not apks:
+              raise SystemExit(f'No Debug APK found in {output}')
+
+          compatible = []
+          for apk in apks:
+              with ZipFile(apk) as archive:
+                  if any(name.startswith('lib/arm64-v8a/') for name in archive.namelist()):
+                      compatible.append(apk)
+          if not compatible:
+              raise SystemExit('No APK contains arm64-v8a native libraries; inspect ABI splits.')
+
+          apk = sorted(compatible, key=lambda p: (0 if 'arm64' in p.name.lower() else 1, p.stat().st_size))[0]
+          names = [
+              'models/indian_flying_pancake_1280.onnx',
+              'models/hydralisk_seg_1024_final.onnx',
+              '肉类新鲜度/公共图像特征.onnx',
+              '肉类新鲜度/猪肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/猪肉_4摄氏度_双目标.onnx',
+              '肉类新鲜度/牛肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/牛肉_4摄氏度_双目标.onnx',
+              '肉类新鲜度/鸡肉_25摄氏度_双目标.onnx',
+              '肉类新鲜度/鸡肉_4摄氏度_双目标.onnx',
+          ]
+          with ZipFile(apk) as archive:
+              for relative in names:
+                  src = root / 'app/src/main/assets' / relative
+                  entry = f'assets/{relative}'
+                  if entry not in archive.namelist():
+                      raise SystemExit(f'ONNX missing from APK: {entry}')
+                  def stream_sha256(stream):
+                      digest = hashlib.sha256()
+                      while True:
+                          block = stream.read(1024 * 1024)
+                          if not block:
+                              break
+                          digest.update(block)
+                      return digest.digest()
+                  with src.open('rb') as source, archive.open(entry) as packaged:
+                      source_hash = stream_sha256(source)
+                      packaged_hash = stream_sha256(packaged)
+                  if source_hash != packaged_hash:
+                      raise SystemExit(f'ONNX content changed in APK: {entry}')
+                  print(f'APK verified: {entry}')
+
+          staging = Path(os.environ['RUNNER_TEMP']) / 'photo2fresh-apk'
+          staging.mkdir(exist_ok=True)
+          dest = staging / 'Photo2Fresh-v1.2.1-code13-ARM64-debug.apk'
+          shutil.copy2(apk, dest)
+          print(f'Staged {dest} ({dest.stat().st_size:,} bytes)')
+          PY
+
+      - name: Upload verified APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Photo2Fresh-1.2.1-13-ARM64-debug
+          path: ${{ runner.temp }}/photo2fresh-apk/*.apk
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
+
+      - name: Upload build diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Photo2Fresh-build-diagnostics
+          path: |
+            ${{ runner.temp }}/photo2fresh-build.log
+            ${{ steps.project.outputs.dir }}/app/build/reports
+          if-no-files-found: ignore
+          retention-days: 3

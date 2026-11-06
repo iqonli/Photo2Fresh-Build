@@ -1,0 +1,52 @@
+{
+  "arm64-v8a": {
+    "sha256": "befe9614158ffab9df695d353ad91141e5c2cc0b1547466b505985c5cfddcd0b",
+    "bytes": 184168602,
+    "model_count": 9,
+    "unchanged_models": true,
+    "abi": [
+      "arm64-v8a"
+    ]
+  },
+  "x86_64": {
+    "sha256": "d76ae2cc30bd4fac98df1116001847f33ddedcfe09f54b1057573801b4ac18c9",
+    "bytes": 222015621,
+    "model_count": 9,
+    "unchanged_models": true,
+    "abi": [
+      "x86_64"
+    ]
+  },
+  "tests": [
+    {
+      "name": "com.iqonli.photo2fresh.regression.RegressionPreprocessingTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-26T07:45:24.492Z",
+      "hostname": "8a21a0adf04a",
+      "time": "0.02"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.ExampleUnitTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-26T07:45:24.368Z",
+      "hostname": "8a21a0adf04a",
+      "time": "0.002"
+    },
+    {
+      "name": "com.iqonli.photo2fresh.regression.DeploymentPixelTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-26T07:45:24.373Z",
+      "hostname": "8a21a0adf04a",
+      "time": "0.116"
+    }
+  ]
+}

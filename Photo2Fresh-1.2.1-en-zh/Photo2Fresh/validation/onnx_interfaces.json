@@ -1,0 +1,150 @@
+{
+  "runtime": "1.24.3",
+  "scope": "Desktop CPU, synthetic fixtures; not device/camera validation",
+  "predictions": [
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 22.73888397216797,
+      "storage_time_h": 49.98234176635742,
+      "freshness": "Spoiled",
+      "route_id": "pork_25c"
+    },
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 1.548879623413086,
+      "storage_time_h": 0.28807932138442993,
+      "freshness": "Fresh",
+      "route_id": "pork_4c"
+    },
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 63.2576904296875,
+      "storage_time_h": 235.74954223632812,
+      "freshness": "Spoiled",
+      "route_id": "beef_25c"
+    },
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 5.924988746643066,
+      "storage_time_h": 868.579833984375,
+      "freshness": "Fresh",
+      "route_id": "beef_4c"
+    },
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 75.3974609375,
+      "storage_time_h": 115.89266204833984,
+      "freshness": "Spoiled",
+      "route_id": "chicken_25c"
+    },
+    {
+      "variant": "corrected",
+      "tvbn_mg_per_100g": 41.07367706298828,
+      "storage_time_h": 133.8461456298828,
+      "freshness": "Spoiled",
+      "route_id": "chicken_4c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 24.334877014160156,
+      "storage_time_h": 52.05724334716797,
+      "freshness": "Spoiled",
+      "route_id": "pork_25c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 0.11808013916015625,
+      "storage_time_h": 0.2530860900878906,
+      "freshness": "Fresh",
+      "route_id": "pork_4c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 65.39432525634766,
+      "storage_time_h": 230.35134887695312,
+      "freshness": "Spoiled",
+      "route_id": "beef_25c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 4.379526138305664,
+      "storage_time_h": 861.7224731445312,
+      "freshness": "Fresh",
+      "route_id": "beef_4c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 76.83597564697266,
+      "storage_time_h": 118.08729553222656,
+      "freshness": "Spoiled",
+      "route_id": "chicken_25c"
+    },
+    {
+      "variant": "raw",
+      "tvbn_mg_per_100g": 39.229759216308594,
+      "storage_time_h": 152.8530731201172,
+      "freshness": "Spoiled",
+      "route_id": "chicken_4c"
+    }
+  ],
+  "indian_flying_pancake_1280.onnx": {
+    "inputs": [
+      [
+        "images",
+        [
+          1,
+          3,
+          1280,
+          1280
+        ],
+        "tensor(float)"
+      ]
+    ],
+    "outputs": [
+      [
+        "output0",
+        [
+          1,
+          300,
+          21
+        ],
+        "tensor(float)"
+      ]
+    ]
+  },
+  "hydralisk_seg_1024_final.onnx": {
+    "inputs": [
+      [
+        "images",
+        [
+          1,
+          3,
+          1024,
+          1024
+        ],
+        "tensor(float)"
+      ]
+    ],
+    "outputs": [
+      [
+        "output0",
+        [
+          1,
+          300,
+          38
+        ],
+        "tensor(float)"
+      ],
+      [
+        "output1",
+        [
+          1,
+          32,
+          256,
+          256
+        ],
+        "tensor(float)"
+      ]
+    ]
+  }
+}

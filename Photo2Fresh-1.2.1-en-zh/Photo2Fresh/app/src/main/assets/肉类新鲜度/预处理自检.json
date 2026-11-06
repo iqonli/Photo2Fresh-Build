@@ -1,0 +1,188 @@
+{
+  "pattern": "value(x,y,c,roiIndex)=(17*x+29*y+71*c+37*roiIndex)%256; x,y start at0; RGB c=0,1,2",
+  "roi_order": [
+    "C11",
+    "C12",
+    "C13",
+    "C21",
+    "C22",
+    "C23",
+    "C31",
+    "C32",
+    "C33"
+  ],
+  "rois": {
+    "C11": {
+      "width": 23,
+      "height": 31,
+      "gains": [
+        0.7,
+        1.2,
+        0.85
+      ]
+    },
+    "C12": {
+      "width": 95,
+      "height": 77,
+      "gains": [
+        0.7799999999999999,
+        1.175,
+        0.89
+      ]
+    },
+    "C13": {
+      "width": 1,
+      "height": 7,
+      "gains": [
+        0.86,
+        1.15,
+        0.9299999999999999
+      ]
+    },
+    "C21": {
+      "width": 100,
+      "height": 132,
+      "gains": [
+        0.94,
+        1.125,
+        0.97
+      ]
+    },
+    "C22": {
+      "width": 64,
+      "height": 64,
+      "gains": [
+        1.02,
+        1.0999999999999999,
+        1.01
+      ]
+    },
+    "C23": {
+      "width": 3,
+      "height": 2,
+      "gains": [
+        1.1,
+        1.075,
+        1.05
+      ]
+    },
+    "C31": {
+      "width": 211,
+      "height": 58,
+      "gains": [
+        1.18,
+        1.0499999999999998,
+        1.0899999999999999
+      ]
+    },
+    "C32": {
+      "width": 72,
+      "height": 89,
+      "gains": [
+        1.26,
+        1.025,
+        1.13
+      ]
+    },
+    "C33": {
+      "width": 19,
+      "height": 103,
+      "gains": [
+        1.3399999999999999,
+        1.0,
+        1.17
+      ]
+    }
+  },
+  "variants": [
+    {
+      "pixel_state": "corrected",
+      "rgb_sha256": "40cfae89ebadcb7a423213dda5e6ceda64324cb97f017aea663dd5c8f388c65b",
+      "nchw_float32_little_endian_sha256": "c15f0d3d52ee9df797bd4fe1561f3cb899f73faa138dabeeb39579d1d2e47f52",
+      "expected_predictions": [
+        {
+          "tvbn_mg_per_100g": 22.73888397216797,
+          "storage_time_h": 49.98234176635742,
+          "freshness": "Spoiled",
+          "route_id": "pork_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 1.548879623413086,
+          "storage_time_h": 0.2880793511867523,
+          "freshness": "Fresh",
+          "route_id": "pork_4c"
+        },
+        {
+          "tvbn_mg_per_100g": 63.2576904296875,
+          "storage_time_h": 235.74954223632812,
+          "freshness": "Spoiled",
+          "route_id": "beef_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 5.924988746643066,
+          "storage_time_h": 868.579833984375,
+          "freshness": "Fresh",
+          "route_id": "beef_4c"
+        },
+        {
+          "tvbn_mg_per_100g": 75.3974609375,
+          "storage_time_h": 115.89266204833984,
+          "freshness": "Spoiled",
+          "route_id": "chicken_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 41.07367706298828,
+          "storage_time_h": 133.8461456298828,
+          "freshness": "Spoiled",
+          "route_id": "chicken_4c"
+        }
+      ]
+    },
+    {
+      "pixel_state": "raw",
+      "rgb_sha256": "56ed89ddb428cce2bdc1ff758019b8fcb99272b34511ab691d5a36b411fec674",
+      "nchw_float32_little_endian_sha256": "0b857f223b15d3a037c84975aec97233b9afba96580e975757959caf54cb91f3",
+      "expected_predictions": [
+        {
+          "tvbn_mg_per_100g": 24.334877014160156,
+          "storage_time_h": 52.05724334716797,
+          "freshness": "Spoiled",
+          "route_id": "pork_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 0.11808013916015625,
+          "storage_time_h": 0.2530860900878906,
+          "freshness": "Fresh",
+          "route_id": "pork_4c"
+        },
+        {
+          "tvbn_mg_per_100g": 65.39432525634766,
+          "storage_time_h": 230.35134887695312,
+          "freshness": "Spoiled",
+          "route_id": "beef_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 4.379526138305664,
+          "storage_time_h": 861.7224731445312,
+          "freshness": "Fresh",
+          "route_id": "beef_4c"
+        },
+        {
+          "tvbn_mg_per_100g": 76.83597564697266,
+          "storage_time_h": 118.08729553222656,
+          "freshness": "Spoiled",
+          "route_id": "chicken_25c"
+        },
+        {
+          "tvbn_mg_per_100g": 39.229759216308594,
+          "storage_time_h": 152.8530731201172,
+          "freshness": "Spoiled",
+          "route_id": "chicken_4c"
+        }
+      ]
+    }
+  ],
+  "prediction_absolute_tolerance": 0.003,
+  "prediction_relative_tolerance": 0.0003,
+  "kotlin_compiled_or_device_executed": false
+}
