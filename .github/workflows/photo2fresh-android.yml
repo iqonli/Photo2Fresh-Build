@@ -227,7 +227,7 @@ jobs:
               > "$RUNNER_TEMP/p2f-signature-$label.txt"
             "$zipalign" -c -P 16 4 "$dest"
             cert="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$RUNNER_TEMP/p2f-signature-$label.txt" | head -n 1 | tr -d ':' | tr '[:upper:]' '[:lower:]')"
-            expected='e4ab0b5972159d47189e4bcd1b7d06ef052b176715d2fcc4185651a4f30c7fa4'
+            expected='53af77e1cefb8915586e077c675f74351a9b4cdf76628fc095c7dd5495816294'
             if [[ "$cert" != "$expected" ]]; then
               echo "Incorrect release certificate for $abi (actual $cert, expected $expected)" >&2
               exit 1
