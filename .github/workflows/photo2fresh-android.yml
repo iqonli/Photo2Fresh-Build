@@ -24,8 +24,8 @@ jobs:
           set -euo pipefail
           if [[ -f settings.gradle.kts || -f settings.gradle ]]; then
             dir="."
-          elif [[ -f Photo2Fresh/settings.gradle.kts || -f Photo2Fresh/settings.gradle ]]; then
-            dir="Photo2Fresh"
+          elif [[ -f Photo2Fresh-1.2.1-en-zh/Photo2Fresh/settings.gradle.kts || -f Photo2Fresh-1.2.1-en-zh/Photo2Fresh/settings.gradle ]]; then
+            dir="Photo2Fresh-1.2.1-en-zh/Photo2Fresh"
           else
             echo 'No settings.gradle(.kts) found in repository root or Photo2Fresh/.' >&2
             exit 1
