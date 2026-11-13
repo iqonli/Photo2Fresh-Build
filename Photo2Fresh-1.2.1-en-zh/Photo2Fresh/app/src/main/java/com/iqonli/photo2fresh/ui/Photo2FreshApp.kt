@@ -488,7 +488,7 @@ private fun sha256Hex(value: String): String = MessageDigest
     .digest(value.toByteArray(Charsets.UTF_8))
     .joinToString(separator = "") { byte -> "%02x".format(byte.toInt() and 0xff) }
 
-private const val APP_TITLE = "photo2fresh v1.2.1"
+private const val APP_TITLE = "photo2fresh v1.2.2"
 
 @Composable
 private fun ThemeButton(
@@ -751,7 +751,7 @@ private fun UserResultScreen(
                 uriString = imageUri,
                 onDecodeFailure = onDecodeFailure,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.75f)
                     .aspectRatio(1f),
             )
             when {
@@ -759,7 +759,7 @@ private fun UserResultScreen(
                     Text(AppLanguage.text(first.condition.label), style = MaterialTheme.typography.titleMedium)
                     TvbnRangeBar(value = first.tvbn)
                     Text(
-                        text = AppLanguage.text("%s (%.1fmg/100g)".format(first.freshness, first.tvbn)),
+                        text = "${AppLanguage.text(first.freshness)}, ${String.format(java.util.Locale.ROOT, "%.1f", first.tvbn).removeSuffix(".0")}mg/100g",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.Center,

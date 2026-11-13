@@ -13,5 +13,7 @@ object AppLanguage {
 
     fun select(language: UiLanguage) { current = language }
     fun reset() { current = UiLanguage.ENGLISH }
-    fun text(source: String): String = DisplayTextCatalog.text(source, current == UiLanguage.ENGLISH)
+    // Keep internal separators intact for existing translation templates.
+    fun text(source: String): String =
+        DisplayTextCatalog.text(source, current == UiLanguage.ENGLISH).replace('·', ' ')
 }

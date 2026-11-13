@@ -24,11 +24,11 @@ for %%F in ("%ARMAPP%" "%X64APP%") do (
     exit /b 2
   )
 )
-set "DIST=%CD%\release-v1.2.1"
+set "DIST=%CD%\release-v1.2.2"
 if not exist "%DIST%" mkdir "%DIST%"
-copy /y "%ARMAPP%" "%DIST%\photo2fresh-v1.2.1-arm64-v8a.apk" >nul
+copy /y "%ARMAPP%" "%DIST%\photo2fresh-v1.2.2-arm64-v8a.apk" >nul
 if errorlevel 1 exit /b 2
-copy /y "%X64APP%" "%DIST%\photo2fresh-v1.2.1-x86_64.apk" >nul
+copy /y "%X64APP%" "%DIST%\photo2fresh-v1.2.2-x86_64.apk" >nul
 if errorlevel 1 exit /b 2
 echo Done: two self-contained APKs in %DIST%
 exit /b 0

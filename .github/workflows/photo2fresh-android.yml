@@ -1,7 +1,9 @@
-name: Photo2Fresh 1.2.1 Signed ARM64
+name: Photo2Fresh 1.2.2 Signed ARM64
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -165,7 +167,7 @@ jobs:
           staging = Path(os.environ['RUNNER_TEMP']) / 'p2f-unsigned'
           staging.mkdir(parents=True, exist_ok=True)
           names = {
-              'arm64-v8a': 'Photo2Fresh-v1.2.1-code13-ARM64-unsigned.apk',
+              'arm64-v8a': 'Photo2Fresh-v1.2.2-code14-ARM64-unsigned.apk',
           }
           for abi, candidates in matches.items():
               apk = candidates[0]
@@ -212,8 +214,8 @@ jobs:
           for entry in 'arm64-v8a:ARM64'; do
             abi="${entry%%:*}"
             label="${entry##*:}"
-            src="$RUNNER_TEMP/p2f-unsigned/Photo2Fresh-v1.2.1-code13-${label}-unsigned.apk"
-            dest="$RUNNER_TEMP/p2f-signed/Photo2Fresh-v1.2.1-code13-${label}-signed.apk"
+            src="$RUNNER_TEMP/p2f-unsigned/Photo2Fresh-v1.2.2-code14-${label}-unsigned.apk"
+            dest="$RUNNER_TEMP/p2f-signed/Photo2Fresh-v1.2.2-code14-${label}-signed.apk"
             echo "Signing $abi"
             "$zipalign" -c -P 16 4 "$src"
             "$apksigner" sign \
@@ -233,16 +235,16 @@ jobs:
             fi
             badging="$($aapt dump badging "$dest" | head -n 1)"
             echo "$badging"
-            [[ "$badging" == *"versionCode='13'"* ]] || { echo 'versionCode is not 13' >&2; exit 1; }
-            [[ "$badging" == *"versionName='1.2.1'"* ]] || { echo 'versionName is not 1.2.1' >&2; exit 1; }
+            [[ "$badging" == *"versionCode='14'"* ]] || { echo 'versionCode is not 14' >&2; exit 1; }
+            [[ "$badging" == *"versionName='1.2.2'"* ]] || { echo 'versionName is not 1.2.2' >&2; exit 1; }
             echo "Signed and verified: $(basename "$dest")"
           done
 
       - name: Upload signed ARM64 APK
         uses: actions/upload-artifact@v4
         with:
-          name: Photo2Fresh-1.2.1-13-ARM64-signed
-          path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.1-code13-ARM64-signed.apk
+          name: Photo2Fresh-1.2.2-14-ARM64-signed
+          path: ${{ runner.temp }}/p2f-signed/Photo2Fresh-v1.2.2-code14-ARM64-signed.apk
           if-no-files-found: error
           retention-days: 3
           compression-level: 0
